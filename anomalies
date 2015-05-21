@@ -1,0 +1,22 @@
+this file serves as a way for me to track the weird shit that happens
+
+linxkb:
+    this file implements ctrl-qwervorak
+    in terminal:
+        open:
+            control shift still qwerty
+            why is control being sent without me pressing it?
+            c,v,a in chrome
+            + in vim
+            shift n opens new window
+        fixed:
+            ^a weird behaviour
+            ^; is ^l
+            ^c sends nothing
+        not a bug:
+            ^, sends , (normal behaviour)
+            ^. sends . (normal behaviour)
+    in chrome:
+        a sends A
+        c sends ^c
+        v sends ^vv

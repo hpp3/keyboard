@@ -1,5 +1,7 @@
 // mapping is done through Level3, NOT overlay enable. somehow caps lock => level3 (I forget how)
 // in types I defined a type MY_LEVEL where I use Level3. then in keycodes I define what it means to be Level3
+// warning this file really is a piece of shit. there are bugs in this that are fixed in new2xkb (now lixkb)
+// don't recommend using
 xkb_keymap {
 xkb_keycodes "evdev+aliases(qwerty)" {
     minimum = 8;
@@ -1192,8 +1194,7 @@ xkb_symbols "pc+us(dvorak)+inet(evdev)+chromebook(overlay)" {
     };
     key <AD07> {
         type= "MY_LEVEL",
-        symbols[Group1]= [               g,               G, Next, g
-],
+        symbols[Group1]= [               g,               G, Next, g ],
         actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AC04>)]
     };
     key <AD08> {
