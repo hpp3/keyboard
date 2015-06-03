@@ -1,6 +1,3 @@
-// mapping is done through Level3, NOT overlay enable. somehow caps lock => level3 (I forget how)
-// in types I defined a type MY_LEVEL where I use Level3. then in keycodes I define what it means to be Level3
-// v0.69 
 xkb_keymap {
 xkb_keycodes "evdev+aliases(qwerty)" {
     minimum = 8;
@@ -62,7 +59,7 @@ xkb_keycodes "evdev+aliases(qwerty)" {
     <KPMU> = 63;
     <LALT> = 64;
     <SPCE> = 65;
-    <CAPS> = 92;
+    <LVL3> = 66;
     <FK01> = 67;
     <FK02> = 68;
     <FK03> = 69;
@@ -88,7 +85,7 @@ xkb_keycodes "evdev+aliases(qwerty)" {
      <KP3> = 89;
      <KP0> = 90;
     <KPDL> = 91;
-    <LVL3> = 66;
+    <CAPS> = 92;
     <LSGT> = 94;
     <FK11> = 95;
     <FK12> = 96;
@@ -406,16 +403,6 @@ xkb_types "complete" {
         level_name[Level7]= "Level3 Ctrl";
         level_name[Level8]= "Shift Level3 Ctrl";
     };
-    type "MY_LEVEL" {
-        modifiers= Shift+LevelThree+Control;
-        map[Shift]= Level2;
-        map[LevelThree]= Level3;
-        map[Control]= Level4;
-        level_name[Level1]= "Base";
-        level_name[Level2]= "Shift";
-        level_name[Level3]= "Level3";
-        level_name[Level4]= "Control";
-    };
     type "THREE_LEVEL" {
         modifiers= Shift+LevelThree;
         map[Shift]= Level2;
@@ -605,7 +592,7 @@ xkb_types "complete" {
     };
 };
 
-xkb_compatibility "complete+chromebook" {
+xkb_compatibility "complete" {
 
     virtual_modifiers NumLock,Alt,LevelThree,LAlt,RAlt,RControl,LControl,ScrollLock,LevelFive,AltGr,Meta,Super,Hyper;
 
@@ -622,9 +609,6 @@ xkb_compatibility "complete+chromebook" {
     interpret Num_Lock+AnyOf(all) {
         virtualModifier= NumLock;
         action= LockMods(modifiers=NumLock);
-    };
-    interpret ISO_Lock+AnyOf(all) {
-        action= ISOLock(modifiers=modMapMods,affect=all);
     };
     interpret ISO_Level3_Shift+AnyOf(all) {
         virtualModifier= LevelThree;
@@ -946,7 +930,7 @@ xkb_compatibility "complete+chromebook" {
         action= LockControls(controls=MouseKeysAccel);
     };
     interpret Overlay1_Enable+AnyOfOrNone(all) {
-        action= SetControls(controls=Overlay1);
+        action= LockControls(controls=Overlay1);
     };
     interpret Overlay2_Enable+AnyOfOrNone(all) {
         action= LockControls(controls=Overlay2);
@@ -1066,6 +1050,9 @@ xkb_compatibility "complete+chromebook" {
     interpret Any+AnyOf(all) {
         action= SetMods(modifiers=modMapMods,clearLocks);
     };
+    group 2 = AltGr;
+    group 3 = AltGr;
+    group 4 = AltGr;
     indicator "Caps Lock" {
         !allowExplicit;
         whichModState= locked;
@@ -1095,303 +1082,289 @@ xkb_compatibility "complete+chromebook" {
     };
 };
 
-xkb_symbols "pc+us(dvorak)+inet(evdev)+chromebook(overlay)" {
+xkb_symbols "pc+us(dvorak)+us:2+inet(evdev)+group(shift_caps_toggle)+group(alt_shift_toggle)+terminate(ctrl_alt_" {
 
     name[group1]="English (Dvorak)";
+    name[group2]="English (US)";
 
     key  <ESC> {         [          Escape ] };
-    key <AE01> {
-        overlay1= <FK01>,
-        symbols[Group1]= [               1,          exclam ]
-    };
-    key <AE02> {
-        overlay1= <FK02>,
-        symbols[Group1]= [               2,              at ]
-    };
-    key <AE03> {
-        overlay1= <FK03>,
-        symbols[Group1]= [               3,      numbersign ]
-    };
-    key <AE04> {
-        overlay1= <FK04>,
-        symbols[Group1]= [               4,          dollar ]
-    };
-    key <AE05> {
-        overlay1= <FK05>,
-        symbols[Group1]= [               5,         percent ]
-    };
+    key <AE01> {         [               1,          exclam ] };
+    key <AE02> {         [               2,              at ] };
+    key <AE03> {         [               3,      numbersign ] };
+    key <AE04> {         [               4,          dollar ] };
+    key <AE05> {         [               5,         percent ] };
     key <AE06> {
-        type= "FOUR_LEVEL",
-        overlay1= <FK06>,
-        symbols[Group1]= [               6,     asciicircum, dead_circumflex, dead_circumflex ]
+        type[group1]= "FOUR_LEVEL",
+        symbols[Group1]= [               6,     asciicircum, dead_circumflex, dead_circumflex ],
+        symbols[Group2]= [               6,     asciicircum ]
     };
-    key <AE07> {
-        overlay1= <FK07>,
-        symbols[Group1]= [               7,       ampersand ]
-    };
-    key <AE08> {
-        overlay1= <FK08>,
-        symbols[Group1]= [               8,        asterisk ]
-    };
+    key <AE07> {         [               7,       ampersand ] };
+    key <AE08> {         [               8,        asterisk ] };
     key <AE09> {
-        type= "FOUR_LEVEL",
-        overlay1= <FK09>,
-        symbols[Group1]= [               9,       parenleft,      dead_grave,        NoSymbol ]
+        type[group1]= "FOUR_LEVEL",
+        symbols[Group1]= [               9,       parenleft,      dead_grave,        NoSymbol ],
+        symbols[Group2]= [               9,       parenleft ]
     };
-    key <AE10> {
-        overlay1= <FK10>,
-        symbols[Group1]= [               0,      parenright ]
-    };
+    key <AE10> {         [               0,      parenright ] };
     key <AE11> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [     bracketleft,       braceleft, NoSymbol, bracketleft ],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AC11>)]
+        symbols[Group1]= [     bracketleft,       braceleft ],
+        symbols[Group2]= [           minus,      underscore ]
     };
     key <AE12> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [    bracketright,      braceright,      NoSymbol, bracketright ],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AD12>)]
+        type[group1]= "FOUR_LEVEL",
+        symbols[Group1]= [    bracketright,      braceright,      dead_tilde,        NoSymbol ],
+        symbols[Group2]= [           equal,            plus ]
     };
     key <BKSP> {
-        overlay1= <DELE>,
-        symbols[Group1]= [       BackSpace,       BackSpace ]
+        type= "CTRL+ALT",
+        symbols[Group1]= [       BackSpace,       BackSpace,        NoSymbol,        NoSymbol, Terminate_Server ]
     };
-    key  <TAB> {         
-        symbols[Group1]= [             Tab,    ISO_Left_Tab, NoSymbol], 
-        actions[Group1]= [ NoAction(), NoAction(), Redirect(key=<PGUP>, clearmods=LevelThree, mods=Control)]
-
+    key  <TAB> {
+        type[group1]= "FOUR_LEVEL",
+        type[group2]= "ALPHABETIC",
+        symbols[Group1]= [             Tab,    ISO_Left_Tab,        NoSymbol,        NoSymbol ],
+        actions[Group1]= [ NoAction(), NoAction(), RedirectKey(key=<PGUP>,mods= Control,clearMods= LevelThree), NoAction() ],
+        symbols[Group2]= [             Tab,    ISO_Left_Tab]
     };
     key <AD01> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [      apostrophe,        quotedbl, NoSymbol, apostrophe],
-        actions[Group1]= [ NoAction(), NoAction(), Redirect(key=<PGDN>, clearmods=LevelThree, mods=Control), Redirect(key=<AB02>)]
+        type[group1]= "FOUR_LEVEL",
+        type[group2]= "ALPHABETIC",
+        symbols[Group1]= [      apostrophe,        quotedbl,        NoSymbol,        NoSymbol ],
+        actions[Group1]= [ NoAction(), NoAction(), RedirectKey(key=<PGDN>,mods= Control,clearMods= LevelThree), NoAction() ],
+        symbols[Group2]= [               q,               Q ]
     };
     key <AD02> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [           comma,            less, NoSymbol, comma],
-        actions[Group1]= [ NoAction(), NoAction(), Redirect(key=<AB08>, clearmods=LevelThree, mods=Control), Redirect(key=<AB08>)]
+        type[group1]= "FOUR_LEVEL",
+        type[group2]= "ALPHABETIC",
+        symbols[Group1]= [           comma,            less,    NoSymbol,      NoSymbol ],
+        actions[Group1]= [ NoAction(), NoAction(), RedirectKey(key=<AB08>,mods= Control,clearMods= LevelThree), NoAction() ],
+        symbols[Group2]= [               w,               W ]
     };
     key <AD03> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [          period,         greater,   NoSymbol, period ],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AC03>)]
+        type[group1]= "FOUR_LEVEL",
+        type[group2]= "ALPHABETIC",
+        symbols[Group1]= [          period,         greater,   dead_abovedot,  periodcentered ],
+        symbols[Group2]= [               e,               E ]
     };
     key <AD04> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               p,               P, Escape, p],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AD09>)]
+        type[group1]= "FOUR_LEVEL",
+        type[group2]= "ALPHABETIC",
+        symbols[Group1]= [               p,               P,          Escape,        NoSymbol ],
+        symbols[Group2]= [               r,               R ]
     };
     key <AD05> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               y,               Y , NoSymbol, y],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AC08>)]
+        type= "ALPHABETIC",
+        symbols[Group1]= [               y,               Y ],
+        symbols[Group2]= [               t,               T ]
     };
     key <AD06> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               f,               F, Home, f],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AD05>)]
+        type[group1]= "FOUR_LEVEL",
+        type[group2]= "ALPHABETIC",
+        symbols[Group1]= [               f,               F,            Home,        NoSymbol ],
+        symbols[Group2]= [               y,               Y ]
     };
     key <AD07> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               g,               G, Next, g],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AC04>)]
+        type[group1]= "FOUR_LEVEL",
+        type[group2]= "ALPHABETIC",
+        symbols[Group1]= [               g,               G,            Next,        NoSymbol ],
+        symbols[Group2]= [               u,               U ]
     };
     key <AD08> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               c,               C, Prior, c],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AC05>)]
+        type[group1]= "FOUR_LEVEL",
+        type[group2]= "ALPHABETIC",
+        symbols[Group1]= [               c,               C,           Prior,        NoSymbol ],
+        symbols[Group2]= [               i,               I ]
     };
     key <AD09> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               r,               R, End, r],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AC02>)]
+        type[group1]= "FOUR_LEVEL",
+        type[group2]= "ALPHABETIC",
+        symbols[Group1]= [               r,               R,             End,        NoSymbol ],
+        symbols[Group2]= [               o,               O ]
     };
     key <AD10> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               l,               L, NoSymbol, l],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AD04>)]
+        type= "ALPHABETIC",
+        symbols[Group1]= [               l,               L ],
+        symbols[Group2]= [               p,               P ]
     };
     key <AD11> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               slash,               question, NoSymbol, slash],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AE11>)]
+        symbols[Group1]= [           slash,        question ],
+        symbols[Group2]= [     bracketleft,       braceleft ]
     };
     key <AD12> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               equal,               plus, NoSymbol, equal],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AE12>)]
+        symbols[Group1]= [           equal,            plus ],
+        symbols[Group2]= [    bracketright,      braceright ]
     };
     key <RTRN> {         [          Return ] };
     key <LCTL> {         [       Control_L ] };
     key <AC01> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               a,               A, NoSymbol, a ],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AC01>)]
+        type= "ALPHABETIC",
+        symbols[Group1]= [               a,               A ]
     };
     key <AC02> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               o,               O, NoSymbol, o],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AC10>)]
+        type= "ALPHABETIC",
+        symbols[Group1]= [               o,               O ],
+        symbols[Group2]= [               s,               S ]
     };
     key <AC03> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               e,               E , NoSymbol, e],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AC06>)]
+        type= "ALPHABETIC",
+        symbols[Group1]= [               e,               E ],
+        symbols[Group2]= [               d,               D ]
     };
     key <AC04> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               u,               U, NoSymbol, u ],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AD06>)]
+        type= "ALPHABETIC",
+        symbols[Group1]= [               u,               U ],
+        symbols[Group2]= [               f,               F ]
     };
     key <AC05> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               i,               I , NoSymbol, i],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AD07>)]
+        type= "ALPHABETIC",
+        symbols[Group1]= [               i,               I ],
+        symbols[Group2]= [               g,               G ]
     };
     key <AC06> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               d,               D, Left , d],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AC07>)]
+        type[group1]= "FOUR_LEVEL",
+        type[group2]= "ALPHABETIC",
+        symbols[Group1]= [               d,               D,            Left,        NoSymbol ],
+        symbols[Group2]= [               h,               H ]
     };
     key <AC07> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               h,               H, Down, h],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AB03>)]
+        type[group1]= "FOUR_LEVEL",
+        type[group2]= "ALPHABETIC",
+        symbols[Group1]= [               h,               H,            Down,        NoSymbol ],
+        symbols[Group2]= [               j,               J ]
     };
     key <AC08> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               t,               T, Up, t],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AB04>)]
+        type[group1]= "FOUR_LEVEL",
+        type[group2]= "ALPHABETIC",
+        symbols[Group1]= [               t,               T,              Up,        NoSymbol ],
+        symbols[Group2]= [               k,               K ]
     };
     key <AC09> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               n,               N, Right, n ],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AD10>)]
+        type[group1]= "FOUR_LEVEL",
+        type[group2]= "ALPHABETIC",
+        symbols[Group1]= [               n,               N,           Right,        NoSymbol ],
+        symbols[Group2]= [               l,               L ]
     };
     key <AC10> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               s,               S , NoSymbol, s],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AB01>)]
+        type[group1]= "ALPHABETIC",
+        symbols[Group1]= [               s,               S ],
+        symbols[Group2]= [       semicolon,           colon ]
     };
     key <AC11> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               minus,               underscore , NoSymbol, minus],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AD01>)]
+        symbols[Group1]= [           minus,      underscore ],
+        symbols[Group2]= [      apostrophe,        quotedbl ]
     };
     key <TLDE> {
-        type= "FOUR_LEVEL",
-        symbols[Group1]= [           grave,      asciitilde,      dead_grave,      dead_tilde ]
+        type[group1]= "FOUR_LEVEL",
+        symbols[Group1]= [           grave,      asciitilde,      dead_grave,      dead_tilde ],
+        symbols[Group2]= [           grave,      asciitilde ]
     };
-    key <LFSH> {         [         Shift_L ] };
+    key <LFSH> {
+        type= "PC_ALT_LEVEL2",
+        symbols[Group1]= [         Shift_L,  ISO_Next_Group ]
+    };
     key <BKSL> {         [       backslash,             bar ] };
     key <AB01> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [       semicolon,           colon, NoSymbol, semicolon],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AB10>)]
+        type[group1]= "FOUR_LEVEL",
+        type[group2]= "ALPHABETIC",
+        symbols[Group1]= [       semicolon,           colon,     dead_ogonek, dead_doubleacute ],
+        symbols[Group2]= [               z,               Z ]
     };
     key <AB02> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               q,               Q, NoSymbol, q ],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AB05>)]
+        type= "ALPHABETIC",
+        symbols[Group1]= [               q,               Q ],
+        symbols[Group2]= [               x,               X ]
     };
     key <AB03> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               j,               J, NoSymbol, j],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AD08>)]
+        type= "ALPHABETIC",
+        symbols[Group1]= [               j,               J ],
+        symbols[Group2]= [               c,               C ]
     };
     key <AB04> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               k,               K, NoSymbol, k ],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AB09>)]
+        type= "ALPHABETIC",
+        symbols[Group1]= [               k,               K ],
+        symbols[Group2]= [               v,               V ]
     };
     key <AB05> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               x,               X, NoSymbol, x ],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AB06>)]
+        type= "ALPHABETIC",
+        symbols[Group1]= [               x,               X ],
+        symbols[Group2]= [               b,               B ]
     };
     key <AB06> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               b,               B, BackSpace, b],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AC09>)]
+        type[group1]= "FOUR_LEVEL",
+        type[group2]= "ALPHABETIC",
+        symbols[Group1]= [               b,               B,       BackSpace,        NoSymbol ],
+        symbols[Group2]= [               n,               N ]
     };
     key <AB07> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               m,               M, Delete, m],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AB07>)]
+        type[group1]= "FOUR_LEVEL",
+        type[group2]= "ALPHABETIC",
+        symbols[Group1]= [               m,               M,          Delete,        NoSymbol ],
+        symbols[Group2]= [               m,               M ]
     };
     key <AB08> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               w,               W, NoSymbol, w ],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AD02>)]
+        type[group1]= "ALPHABETIC",
+        symbols[Group1]= [               w,               W ],
+        symbols[Group2]= [           comma,            less ]
     };
     key <AB09> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               v,               V, NoSymbol, v],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AD03>)]
+        type[group1]= "ALPHABETIC",
+        symbols[Group1]= [               v,               V ],
+        symbols[Group2]= [          period,         greater ]
     };
     key <AB10> {
-        type= "MY_LEVEL",
-        symbols[Group1]= [               z,               Z, NoSymbol, z],
-        actions[Group1]= [ NoAction(), NoAction(), NoAction(), Redirect(key=<AD11>)]
+        type[group1]= "ALPHABETIC",
+        symbols[Group1]= [               z,               Z ],
+        symbols[Group2]= [           slash,        question ]
     };
-    key <RTSH> {         [         Shift_R ] };
+    key <RTSH> {
+        type= "PC_ALT_LEVEL2",
+        symbols[Group1]= [         Shift_R,  ISO_Next_Group ]
+    };
     key <KPMU> {
         type= "CTRL+ALT",
         symbols[Group1]= [     KP_Multiply,     KP_Multiply,     KP_Multiply,     KP_Multiply,   XF86ClearGrab ]
     };
-    key <LALT> {
-        symbols[Group1]= [           Alt_L,          Meta_L]
-    };
+    key <LALT> {         [           Alt_L,  ISO_Next_Group ] };
     key <SPCE> {         [           space ] };
-    key <CAPS> {         [  Overlay1_Enable ] };
+    key <CAPS> {         [       Caps_Lock,  ISO_Next_Group ] };
     key <FK01> {
         type= "CTRL+ALT",
-        overlay1= <I247>,
         symbols[Group1]= [              F1,              F1,              F1,              F1, XF86Switch_VT_1 ]
     };
     key <FK02> {
         type= "CTRL+ALT",
-        overlay1= <I248>,
         symbols[Group1]= [              F2,              F2,              F2,              F2, XF86Switch_VT_2 ]
     };
     key <FK03> {
         type= "CTRL+ALT",
-        overlay1= <I249>,
         symbols[Group1]= [              F3,              F3,              F3,              F3, XF86Switch_VT_3 ]
     };
     key <FK04> {
         type= "CTRL+ALT",
-        overlay1= <I235>,
         symbols[Group1]= [              F4,              F4,              F4,              F4, XF86Switch_VT_4 ]
     };
     key <FK05> {
         type= "CTRL+ALT",
-        overlay1= <I250>,
         symbols[Group1]= [              F5,              F5,              F5,              F5, XF86Switch_VT_5 ]
     };
     key <FK06> {
         type= "CTRL+ALT",
-        overlay1= <I232>,
         symbols[Group1]= [              F6,              F6,              F6,              F6, XF86Switch_VT_6 ]
     };
     key <FK07> {
         type= "CTRL+ALT",
-        overlay1= <I233>,
         symbols[Group1]= [              F7,              F7,              F7,              F7, XF86Switch_VT_7 ]
     };
     key <FK08> {
         type= "CTRL+ALT",
-        overlay1= <MUTE>,
         symbols[Group1]= [              F8,              F8,              F8,              F8, XF86Switch_VT_8 ]
     };
     key <FK09> {
         type= "CTRL+ALT",
-        overlay1= <VOL->,
         symbols[Group1]= [              F9,              F9,              F9,              F9, XF86Switch_VT_9 ]
     };
     key <FK10> {
         type= "CTRL+ALT",
-        overlay1= <VOL+>,
         symbols[Group1]= [             F10,             F10,             F10,             F10, XF86Switch_VT_10 ]
     };
     key <NMLK> {         [        Num_Lock ] };
@@ -1434,7 +1407,7 @@ xkb_symbols "pc+us(dvorak)+inet(evdev)+chromebook(overlay)" {
     key <HKTG> {         [ Hiragana_Katakana ] };
     key <MUHE> {         [        Muhenkan ] };
     key <KPEN> {         [        KP_Enter ] };
-    key <RCTL> {         [       Control_R, Control_R, Caps_Lock] };
+    key <RCTL> {         [       Control_R ] };
     key <KPDV> {
         type= "CTRL+ALT",
         symbols[Group1]= [       KP_Divide,       KP_Divide,       KP_Divide,       KP_Divide,      XF86Ungrab ]
@@ -1444,28 +1417,17 @@ xkb_symbols "pc+us(dvorak)+inet(evdev)+chromebook(overlay)" {
         symbols[Group1]= [           Print,         Sys_Req ]
     };
     key <RALT> {
-        symbols[Group1]= [           Alt_R,          Meta_R, Super_R]
+        type= "TWO_LEVEL",
+        symbols[Group1]= [           Alt_R,  ISO_Next_Group ]
     };
     key <LNFD> {         [        Linefeed ] };
     key <HOME> {         [            Home ] };
-    key   <UP> {
-        overlay1= <PGUP>,
-        symbols[Group1]= [              Up ]
-    };
+    key   <UP> {         [              Up ] };
     key <PGUP> {         [           Prior ] };
-    key <LEFT> {
-        overlay1= <HOME>,
-        symbols[Group1]= [            Left ]
-    };
-    key <RGHT> {
-        overlay1= <END>,
-        symbols[Group1]= [           Right ]
-    };
+    key <LEFT> {         [            Left ] };
+    key <RGHT> {         [           Right ] };
     key  <END> {         [             End ] };
-    key <DOWN> {
-        overlay1= <PGDN>,
-        symbols[Group1]= [            Down ]
-    };
+    key <DOWN> {         [            Down ] };
     key <PGDN> {         [            Next ] };
     key  <INS> {         [          Insert ] };
     key <DELE> {         [          Delete ] };
@@ -1483,13 +1445,8 @@ xkb_symbols "pc+us(dvorak)+inet(evdev)+chromebook(overlay)" {
     key <I129> {         [      KP_Decimal,      KP_Decimal ] };
     key <HNGL> {         [          Hangul ] };
     key <HJCV> {         [    Hangul_Hanja ] };
-    key <LWIN> {
-        symbols[Group1]= [ ISO_Level3_Shift ]
-    };
-    key <RWIN> {
-        overlay1= <I253>,
-        symbols[Group1]= [         Super_R ]
-    };
+    key <LWIN> {         [         Super_L ] };
+    key <RWIN> {         [         Super_R ] };
     key <COMP> {         [            Menu ] };
     key <STOP> {         [          Cancel ] };
     key <AGAI> {         [            Redo ] };
@@ -1545,7 +1502,6 @@ xkb_symbols "pc+us(dvorak)+inet(evdev)+chromebook(overlay)" {
     key <FK16> {         [     XF86Launch7 ] };
     key <FK17> {         [     XF86Launch8 ] };
     key <FK18> {         [     XF86Launch9 ] };
-    key <FK20> {         [ XF86AudioMicMute ] };
     key <FK21> {         [ XF86TouchpadToggle ] };
     key <FK22> {         [  XF86TouchpadOn ] };
     key <FK23> {         [ XF86TouchpadOff ] };
@@ -1588,11 +1544,6 @@ xkb_symbols "pc+us(dvorak)+inet(evdev)+chromebook(overlay)" {
     key <I244> {         [     XF86Battery ] };
     key <I245> {         [   XF86Bluetooth ] };
     key <I246> {         [        XF86WLAN ] };
-    key <I247> {         [        XF86Back ] };
-    key <I248> {         [     XF86Forward ] };
-    key <I249> {         [      XF86Reload ] };
-    key <I250> {         [ XF86ApplicationRight ] };
-    key <I253> {         [        NoSymbol ] };
     modifier_map Control { <LCTL> };
     modifier_map Shift { <LFSH> };
     modifier_map Shift { <RTSH> };
@@ -1602,6 +1553,7 @@ xkb_symbols "pc+us(dvorak)+inet(evdev)+chromebook(overlay)" {
     modifier_map Mod5 { <LVL3> };
     modifier_map Control { <RCTL> };
     modifier_map Mod1 { <RALT> };
+    modifier_map Mod4 { <LWIN> };
     modifier_map Mod4 { <RWIN> };
     modifier_map Mod5 { <MDSW> };
     modifier_map Mod1 { <META> };
@@ -1609,7 +1561,7 @@ xkb_symbols "pc+us(dvorak)+inet(evdev)+chromebook(overlay)" {
     modifier_map Mod4 { <HYPR> };
 };
 
-xkb_geometry "pc(pc104)" {
+xkb_geometry "pc(pc101)" {
 
     width=       470;
     height=      180;
@@ -1620,7 +1572,7 @@ xkb_geometry "pc(pc104)" {
     baseColor=   "white";
     labelColor=  "black";
     xfont=       "-*-helvetica-medium-r-normal--*-120-*-*-*-*-iso8859-1";
-    description= "Generic 104";
+    description= "Generic 101";
 
     shape "NORM" {
         corner= 1,
@@ -1667,15 +1619,10 @@ xkb_geometry "pc(pc104)" {
         { [  27,  18 ] },
         { [   2,   1 ], [  25,  16 ] }
     };
-    shape "SMOD" {
-        corner= 1,
-        { [  23,  18 ] },
-        { [   2,   1 ], [  21,  16 ] }
-    };
     shape "SPCE" {
         corner= 1,
-        { [ 113,  18 ] },
-        { [   2,   1 ], [ 111,  16 ] }
+        { [ 133,  18 ] },
+        { [   2,   1 ], [ 131,  16 ] }
     };
     shape "KP0" {
         corner= 1,
@@ -1787,13 +1734,10 @@ xkb_geometry "pc(pc104)" {
             left= 1;
             keys {
                 { <LCTL>, "MODK",   1, color="grey20" },
-                { <LWIN>, "SMOD",   1, color="grey20" },
-                { <LALT>, "SMOD",   1, color="grey20" },
+                { <LALT>, "MODK",  21, color="grey20" },
                 { <SPCE>, "SPCE",   1 },
-                { <RALT>, "SMOD",   1, color="grey20" },
-                { <RWIN>, "SMOD",   1, color="grey20" },
-                { <MENU>, "SMOD",   1, color="grey20" },
-                { <RCTL>, "SMOD",   1, color="grey20" }
+                { <RALT>, "MODK",   1, color="grey20" },
+                { <RCTL>, "MODK",  21, color="grey20" }
             };
         };
     }; // End of "Alpha" section

@@ -1,6 +1,6 @@
 // mapping is done through Level3, NOT overlay enable. somehow caps lock => level3 (I forget how)
 // in types I defined a type MY_LEVEL where I use Level3. then in keycodes I define what it means to be Level3
-// warning this file really is a piece of shit. there are bugs in this that are fixed in new2xkb (now lixkb)
+// warning this file really is a piece of shit. there are bugs in this that are fixed in new2xkb or linxkb
 // don't recommend using
 xkb_keymap {
 xkb_keycodes "evdev+aliases(qwerty)" {

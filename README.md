@@ -3,4 +3,12 @@ newxkb uses level3 (defined a new level called my_level). action and symbol allo
 
 01/29/2015 updated newxkb, fixed ctrl j pointing to ctrl c. works on school linux. renamed linxkb
 
-05/20/2015 myxkb.xkm and new2xkb don’t work with xdq for some reason.
+05/20/2015 
+
+linxkb implements ctrl qwervorak
+new2xkb doesn't attempt to
+newxkb is a piece of shit that doesn't work. 
+
+06/03/2015
+
+made a new script, called dumpxkb
