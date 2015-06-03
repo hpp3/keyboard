@@ -11,4 +11,4 @@ newxkb is a piece of shit that doesn't work.
 
 06/03/2015
 
-made a new script, called dumpxkb
+made a new script, called dumpxkb 

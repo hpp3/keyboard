@@ -6,6 +6,10 @@ linxkb:
         open:
             control shift still qwerty
             why is control being sent without me pressing it?
+            why is control being sent without me pressing it?
+            why is control being sent without me pressing it?
+            why is control being sent without me pressing it?
+            why is control being sent without me pressing it?
             c,v,a in chrome
             + in vim
             shift n opens new window
@@ -20,3 +24,6 @@ linxkb:
         a sends A
         c sends ^c
         v sends ^vv
+    I give up on this shit 
+
+dumpxkb: has qwervorak?? in terminal but not in chrome 
